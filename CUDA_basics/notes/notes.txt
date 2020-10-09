@@ -1,0 +1,36 @@
+Unified Memory
+- single memory for both host and device memory
+
+cudaMallocManaged()
+
+prefetch:
+cudaMemPrefetchAsync(x, bytes, id);
+- to improve performance
+_____________________________________________________________________________________________________
+
+Matrix Multiplication
+- for every element of the result matrix we assign a new thread
+
+blockIdx and threadIdx
+blockDim
+- no of threads in the block in x or y or z direction
+
+map the matrix in to a 2D block
+
+row = blockIdx.x * blockDim.y + threadIdx.x
+col = blockIdx.y * blockDim.x + threadIdx.y
+
+performance
+- coalecing writes
+	- 2d to 1d
+- shared memory
+
+cache tiling 
+- DRAM is slow
+	- so caching is needed
+	- use shared memory
+		- user managed L1 cache
+		- private per thread block
+		- but entire input won't fit in the cache so we only put pieces of input in the cache
+
+__shared__ = to initialize shared memory
