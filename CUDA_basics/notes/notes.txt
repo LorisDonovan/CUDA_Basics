@@ -34,3 +34,8 @@ cache tiling
 		- but entire input won't fit in the cache so we only put pieces of input in the cache
 
 __shared__ = to initialize shared memory
+
+Coalescing
+- second matrix is col major so elements are far apart
+	- transpose the first matrix
+- make both matrix col maj
