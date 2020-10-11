@@ -51,7 +51,7 @@ int main()
 	VerifyResult(h_A, h_B, h_C, scale, N);
 	std::cout << "Vector verified!" << std::endl;
 
-	cublasDestroy(handle);
+	cublasDestroy_v2(handle);
 	cudaFree(d_A);
 	cudaFree(d_B);
 	free(h_A);
