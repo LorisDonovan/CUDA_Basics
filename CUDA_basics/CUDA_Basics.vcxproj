@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\matrixMult\matrixMultCoalescing.cu" />
+    <CudaCompile Include="src\vectorAdd\cuBLASVectorAdd.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6A2E149-2258-5A3F-AB4C-541617015143}</ProjectGuid>
