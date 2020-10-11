@@ -49,8 +49,8 @@ int main()
 	Print(h_Y, 5);
 
 	// deallocating memory
-	cudaFree(h_X);
-	cudaFree(h_Y);
+	free(h_X);
+	free(h_Y);
 	cudaFree(d_X);
 	cudaFree(d_Y);
 
