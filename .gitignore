@@ -349,5 +349,18 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-bin/
+
+# Binaries
+**/bin/
+!premake/
 bin-int/
+
+# My_OpenGL files
+*.log
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
