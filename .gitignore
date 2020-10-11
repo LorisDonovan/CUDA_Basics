@@ -353,6 +353,7 @@ MigrationBackup/
 # Binaries
 **/bin/
 !premake/
+!CUDA_Basics/dependencies/cudaByExample/bin/
 bin-int/
 
 # My_OpenGL files

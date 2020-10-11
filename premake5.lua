@@ -37,13 +37,21 @@ project "CUDA_Basics"
 	includedirs
 	{
 		"CUDA_Basics/src",
+		"CUDA_Basics/dependencies",
+		"CUDA_Basics/dependencies/cudaByExample/include"
+	}
+
+	libdirs
+	{
+		"CUDA_Basics/dependencies/cudaByExample/lib"
 	}
 
 	links
 	{
 		"cudart_static.lib",
 		"cublas.lib",
-		"curand.lib"
+		"curand.lib",
+		"glut64.lib"
 	}
 
 	filter "system:windows"
