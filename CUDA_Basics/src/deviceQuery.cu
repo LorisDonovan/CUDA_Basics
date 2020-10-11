@@ -1,12 +1,14 @@
 #include <cuda_runtime.h>
 #include <stdio.h>
 
+
 int main(void)
 {
 	cudaDeviceProp prop;
 	int count;
 	cudaGetDeviceCount(&count);
-	for (int i = 0; i < count; i++) {
+	for (int i = 0; i < count; i++)
+	{
 		cudaGetDeviceProperties(&prop, i);
 		printf(" --- General Information for device %d ---\n", i);
 		printf("Name: %s\n", prop.name);
