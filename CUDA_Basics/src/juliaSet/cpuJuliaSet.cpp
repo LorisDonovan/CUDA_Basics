@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "cpu_bitmap.h"
 
-#define DIM 1000
+#define DIM 800
 
 struct Complex
 {
@@ -31,7 +31,7 @@ int32_t Julia(int32_t x, int32_t y)
 	float jx = scale * (float)(DIM/2 - x)/(DIM/2);
 	float jy = scale * (float)(DIM/2 - y)/(DIM/2);
 
-	Complex c(0.37f, 0.1f);
+	Complex c(-0.8f, 0.156f);
 	Complex z(jx, jy);
 
 	for (int i = 0; i < 200; i++)
@@ -52,12 +52,11 @@ void Kernel(uint8_t* ptr)
 			int32_t offset = x + y * DIM;
 
 			int32_t juliaValue = Julia(x, y);
-			ptr[offset * 4 + 0] = 255 * juliaValue; // R
-			ptr[offset * 4 + 1] = 0;				// G
-			ptr[offset * 4 + 2] = 0;				// B
-			ptr[offset * 4 + 3] = 255;				// A
+			ptr[offset * 4 + 0] = 50 * juliaValue; // R
+			ptr[offset * 4 + 1] = 145 * juliaValue; // G
+			ptr[offset * 4 + 2] = 168 * juliaValue; // B
+			ptr[offset * 4 + 3] = 255; // A
 		}
-
 	}
 }
 
