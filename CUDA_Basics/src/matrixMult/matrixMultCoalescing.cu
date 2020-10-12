@@ -68,7 +68,8 @@ __global__ void CopyMatrix(float* dest, const float* src, int32_t N)
 	int32_t row = blockIdx.y * blockDim.y + threadIdx.y;
 	int32_t col = blockIdx.x * blockDim.x + threadIdx.x;
 	
-	dest[row * N + col] = src[row * N + col];
+	if (row < N && col < N)
+		dest[row * N + col] = src[row * N + col];
 }
 
 __global__ void Transpose(float* mat, float* matT, int32_t N)
@@ -76,7 +77,8 @@ __global__ void Transpose(float* mat, float* matT, int32_t N)
 	int32_t row = blockIdx.y * blockDim.y + threadIdx.y;
 	int32_t col = blockIdx.x * blockDim.x + threadIdx.x;
 
-	matT[col * N + row] = mat[row * N + col];
+	if (row < N && col < N)
+		matT[col * N + row] = mat[row * N + col];
 }
 
 __global__ void MatrixMult(float* a, float* b, float* c, int32_t N)
@@ -84,9 +86,12 @@ __global__ void MatrixMult(float* a, float* b, float* c, int32_t N)
 	int32_t row = blockIdx.y * blockDim.y + threadIdx.y;
 	int32_t col = blockIdx.x * blockDim.x + threadIdx.x;
 
-	c[row * N + col] = 0;
-	for (int i = 0; i < N; i++)
-		c[row * N + col] += a[i * N + row] * b[i * N + col];
+	if (row < N && col < N)
+	{
+		c[row * N + col] = 0;
+		for (int i = 0; i < N; i++)
+			c[row * N + col] += a[i * N + row] * b[i * N + col];
+	}
 }
 
 void VerifyResult(std::vector<float>& a, std::vector<float>& b, std::vector<float>& c, int32_t N)

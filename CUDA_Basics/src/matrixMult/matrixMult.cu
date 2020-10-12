@@ -66,9 +66,12 @@ __global__ void MatrixMult(float* a, float* b, float* c, int32_t N)
 	int32_t row = blockIdx.y * blockDim.y + threadIdx.y;
 	int32_t col = blockIdx.x * blockDim.x + threadIdx.x;
 
-	c[row * N + col] = 0;
-	for (int i = 0; i < N; i++)
-		c[row * N + col] += a[row * N + i] * b[i * N + col];
+	if (row < N && col < N)
+	{
+		c[row * N + col] = 0;
+		for (int i = 0; i < N; i++)
+			c[row * N + col] += a[row * N + i] * b[i * N + col];
+	}
 }
 
 __global__ void TiledMatrixMult(float* a, float* b, float* c, int32_t N) // cache tiling
@@ -80,26 +83,29 @@ __global__ void TiledMatrixMult(float* a, float* b, float* c, int32_t N) // cach
 	__shared__ int32_t s_A[SHMEM_SIZE];
 	__shared__ int32_t s_B[SHMEM_SIZE];
 
-	float temp = 0;
-	// Sweep tile across matrix
-	for (int i = 0; i < N; i += blockDim.x)
+	if (row < N && col < N)
 	{
-		// Load elements for this tile
-		s_A[threadIdx.y * blockDim.x + threadIdx.x] = a[row * N + i + threadIdx.x];
-		s_B[threadIdx.y * blockDim.x + threadIdx.x] = b[i * N + threadIdx.y * N + col];
-
-		// Ensure all threads have loaded their data before processing
-		__syncthreads();
-
-		// Do matrix multiplication on the small matrix
-		for (int j = 0; j < blockDim.x; j++)
+		float temp = 0;
+		// Sweep tile across matrix
+		for (int i = 0; i < N; i += blockDim.x)
 		{
-			temp += s_A[threadIdx.y * blockDim.x + j] * s_B[j * blockDim.x + threadIdx.x];
+			// Load elements for this tile
+			s_A[threadIdx.y * blockDim.x + threadIdx.x] = a[row * N + i + threadIdx.x];
+			s_B[threadIdx.y * blockDim.x + threadIdx.x] = b[i * N + threadIdx.y * N + col];
+
+			// Ensure all threads have loaded their data before processing
+			__syncthreads();
+
+			// Do matrix multiplication on the small matrix
+			for (int j = 0; j < blockDim.x; j++)
+			{
+				temp += s_A[threadIdx.y * blockDim.x + j] * s_B[j * blockDim.x + threadIdx.x];
+			}
+			// Ensure some threads don't progress and stomp current shared memory values
+			__syncthreads();
 		}
-		// Ensure some threads don't progress and stomp current shared memory values
-		__syncthreads();
+		c[(row * N) + col] = temp;
 	}
-	c[(row * N) + col] = temp;
 }
 
 void VerifyResult(std::vector<float>& a, std::vector<float>& b, std::vector<float>& c, int32_t N)
