@@ -34,6 +34,15 @@ cache tiling
 		- but entire input won't fit in the cache so we only put pieces of input in the cache
 
 __shared__ = to initialize shared memory
+__shared__ creates a copy of the variable for each block
+		- every thread in tht block shares this memory
+		- threads cannot see or modify shared memory of other blocks
+		- but synchronization of threads is necessary 
+__syncthreads() guarantees that every thread in the block has completed its execution prior to it
+reduction: producing a smallar array after operating on the input arrays
+// if we iterate over the smallar array with one thread the time complexity will linearly increase
+// we can reduce the time complexity to logarithmic 
+
 
 Coalescing
 - second matrix is col major so elements are far apart
