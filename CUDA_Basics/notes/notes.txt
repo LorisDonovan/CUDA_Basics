@@ -39,6 +39,8 @@ __shared__ creates a copy of the variable for each block
 		- threads cannot see or modify shared memory of other blocks
 		- but synchronization of threads is necessary 
 __syncthreads() guarantees that every thread in the block has completed its execution prior to it
+				- syncs threads in a block
+				- dont use it in places where only some threads can execute it (ie, in if() statement)
 reduction: producing a smallar array after operating on the input arrays
 // if we iterate over the smallar array with one thread the time complexity will linearly increase
 // we can reduce the time complexity to logarithmic 
