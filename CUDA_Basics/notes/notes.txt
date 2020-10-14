@@ -57,5 +57,6 @@ Constant Memory
 - in GPU, the bottleneck is not the throughput of arithmetic units rather the memory bandwidth
 - constant memory stores data tht will not change over the course of kernel execution
 - using constant memory rather than global memory will reduce the required memory bandwidth
-
+- A single read from constant memory can be broadcast to other “nearby” threads (for half-warp), effectively saving up to 15 reads.
+- Constant memory is cached, so consecutive reads of the same address will not incur any additional memory traffic
 

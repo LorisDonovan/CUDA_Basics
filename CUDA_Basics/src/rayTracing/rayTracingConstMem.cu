@@ -4,13 +4,13 @@
 #include <iostream>
 #include <random>
 #include <functional>
+#include <iomanip>
 
 #include "cpu_bitmap.h"
 
 #define DIM 1024
 #define INF 2e10f
 #define NUM_SPHERES 20
-#define rnd( x ) (x * rand() / RAND_MAX)
 
 struct Sphere
 {
@@ -33,8 +33,10 @@ struct Sphere
 	}
 };
 
-__global__ void Kernel(uint8_t* ptr, Sphere* s);
-void InitSphere(Sphere* s, std::function<float(float)> randFunc);
+__constant__ Sphere s[NUM_SPHERES];
+
+__global__ void Kernel(uint8_t* ptr);
+void InitSphere(Sphere* spheres, std::function<float(float)> randFunc);
 
 int main()
 {
@@ -48,19 +50,17 @@ int main()
 
 	CPUBitmap bitmap(DIM, DIM);
 	uint8_t* d_Bitmap;
-	Sphere* d_s;
-	
+
 	cudaMalloc(&d_Bitmap, bitmap.image_size());
-	cudaMalloc(&d_s, NUM_SPHERES * sizeof(Sphere));
 
 	Sphere* temp_s = (Sphere*)malloc(NUM_SPHERES * sizeof(Sphere));
 	InitSphere(temp_s, [&](float x) { return x * distribution(gen); });
-	cudaMemcpy(d_s, temp_s, NUM_SPHERES * sizeof(Sphere), cudaMemcpyHostToDevice);
+	cudaMemcpyToSymbol(s, temp_s, NUM_SPHERES * sizeof(Sphere));
 	free(temp_s);
 
 	dim3 grids(DIM / 16, DIM / 16);
 	dim3 threads(16, 16);
-	Kernel<<<grids, threads>>>(d_Bitmap, d_s);
+	Kernel<<<grids, threads>>>(d_Bitmap);
 	cudaMemcpy(bitmap.get_ptr(), d_Bitmap, bitmap.image_size(), cudaMemcpyDeviceToHost);
 
 	// get stop time, and display the timing results
@@ -76,11 +76,10 @@ int main()
 	bitmap.display_and_exit();
 
 	cudaFree(d_Bitmap);
-	cudaFree(d_s);
 	return 0;
 }
 
-__global__ void Kernel(uint8_t* ptr, Sphere* s)
+__global__ void Kernel(uint8_t* ptr)
 {
 	int32_t x = blockIdx.x * blockDim.x + threadIdx.x;
 	int32_t y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -111,16 +110,16 @@ __global__ void Kernel(uint8_t* ptr, Sphere* s)
 	ptr[offset * 4 + 3] = 255;
 }
 
-void InitSphere(Sphere* s, std::function<float(float)> randFunc)
+void InitSphere(Sphere* spheres, std::function<float(float)> randFunc)
 {
 	for (int i = 0; i < NUM_SPHERES; i++)
 	{
-		s[i].r = randFunc(1.0f);
-		s[i].g = randFunc(1.0f);
-		s[i].b = randFunc(1.0f);
-		s[i].x = randFunc(1000.0f) - 500.0f;
-		s[i].y = randFunc(1000.0f) - 500.0f;
-		s[i].z = randFunc(1000.0f) - 500.0f;
-		s[i].radius = randFunc(100.0f) + 20.0f;
+		spheres[i].r = randFunc(1.0f);
+		spheres[i].g = randFunc(1.0f);
+		spheres[i].b = randFunc(1.0f);
+		spheres[i].x = randFunc(1000.0f) - 500.0f;
+		spheres[i].y = randFunc(1000.0f) - 500.0f;
+		spheres[i].z = randFunc(1000.0f) - 500.0f;
+		spheres[i].radius = randFunc(100.0f) + 20.0f;
 	}
 }
