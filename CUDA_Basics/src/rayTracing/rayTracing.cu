@@ -26,7 +26,7 @@ struct Sphere
 		if ((dx * dx + dy * dy) < (radius * radius))
 		{
 			float dz = std::sqrtf(radius * radius - dx * dx - dy * dy);
-			*n = dz / radius;
+			*n = dz / std::sqrtf(radius * radius);
 			return dz + z;
 		}
 		return -INF;
