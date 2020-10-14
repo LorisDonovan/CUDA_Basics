@@ -50,3 +50,12 @@ Coalescing
 - second matrix is col major so elements are far apart
 	- transpose the first matrix
 - make both matrix col maj
+
+
+
+Constant Memory
+- in GPU, the bottleneck is not the throughput of arithmetic units rather the memory bandwidth
+- constant memory stores data tht will not change over the course of kernel execution
+- using constant memory rather than global memory will reduce the required memory bandwidth
+
+
