@@ -4,7 +4,6 @@
 #include <iostream>
 #include <random>
 #include <functional>
-#include <iomanip>
 
 #include "cpu_bitmap.h"
 
@@ -33,7 +32,7 @@ struct Sphere
 	}
 };
 
-__constant__ Sphere s[NUM_SPHERES];
+__constant__ Sphere spheres[NUM_SPHERES];
 
 __global__ void Kernel(uint8_t* ptr);
 void InitSphere(Sphere* spheres, std::function<float(float)> randFunc);
@@ -46,7 +45,7 @@ int main()
 	cudaEvent_t start, stop;
 	cudaEventCreate(&start);
 	cudaEventCreate(&stop);
-	cudaEventRecord(start, 0);
+	cudaEventRecord(start, nullptr);
 
 	CPUBitmap bitmap(DIM, DIM);
 	uint8_t* d_Bitmap;
@@ -55,7 +54,7 @@ int main()
 
 	Sphere* temp_s = (Sphere*)malloc(NUM_SPHERES * sizeof(Sphere));
 	InitSphere(temp_s, [&](float x) { return x * distribution(gen); });
-	cudaMemcpyToSymbol(s, temp_s, NUM_SPHERES * sizeof(Sphere));
+	cudaMemcpyToSymbol(spheres, temp_s, NUM_SPHERES * sizeof(Sphere));
 	free(temp_s);
 
 	dim3 grids(DIM / 16, DIM / 16);
@@ -64,7 +63,7 @@ int main()
 	cudaMemcpy(bitmap.get_ptr(), d_Bitmap, bitmap.image_size(), cudaMemcpyDeviceToHost);
 
 	// get stop time, and display the timing results
-	cudaEventRecord(stop, 0);
+	cudaEventRecord(stop, nullptr);
 	cudaEventSynchronize(stop);
 	float elapsedTime;
 	cudaEventElapsedTime(&elapsedTime, start, stop);
@@ -90,16 +89,16 @@ __global__ void Kernel(uint8_t* ptr)
 	float r = 0, g = 0, b = 0;
 	float maxz = -INF;
 
-	for (int i = 0; i < NUM_SPHERES; i++)
+	for (auto& v : spheres)
 	{
 		float n;
-		float t = s[i].Hit(ox, oy, &n);
+		float t = v.Hit(ox, oy, &n);
 		if (t > maxz)
 		{
 			float fscale = n;
-			r = s[i].r * fscale;
-			g = s[i].g * fscale;
-			b = s[i].b * fscale;
+			r = v.r * fscale;
+			g = v.g * fscale;
+			b = v.b * fscale;
 			maxz = t;
 		}
 	}
