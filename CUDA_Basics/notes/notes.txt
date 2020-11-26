@@ -60,3 +60,11 @@ Constant Memory
 - A single read from constant memory can be broadcast to other “nearby” threads (for half-warp), effectively saving up to 15 reads.
 - Constant memory is cached, so consecutive reads of the same address will not incur any additional memory traffic
 
+
+Texture Memory
+- like constant memory it is also cached
+- texture caches are designed for graphics applications where memory access patterns exhibit a great deal of spatial locality. 
+- can provide higher effective bandwidth by reducing memory requests to off chip DRAM
+- we use tex1Dfetch() (which is a compiler intrinsic; tex2D() for 2d texture units) to fetch data from texture unit
+- texture references must be global
+
