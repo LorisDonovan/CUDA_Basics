@@ -61,6 +61,6 @@ project "CUDA_Basics"
 			runtime "Debug"
 			symbols "on"
 
-		filter "configurations:Debug"
-			runtime "Debug"
+		filter "configurations:Release"
+			runtime "Release"
 			optimize "on"
