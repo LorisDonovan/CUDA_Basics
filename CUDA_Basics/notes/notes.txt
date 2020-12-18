@@ -51,7 +51,7 @@ Coalescing
 	- transpose the first matrix
 - make both matrix col maj
 
-
+/////////////////////
 
 Constant Memory
 - in GPU, the bottleneck is not the throughput of arithmetic units rather the memory bandwidth

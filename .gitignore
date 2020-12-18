@@ -356,7 +356,7 @@ MigrationBackup/
 !CUDA_Basics/dependencies/cudaByExample/bin/
 bin-int/
 
-# My_OpenGL files
+
 *.log
 
 # Visual Studio files and folder
