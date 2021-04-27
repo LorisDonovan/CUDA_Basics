@@ -16,7 +16,7 @@ void VerifyResult(std::vector<float>& a, std::vector<float>& b, std::vector<floa
 
 int main()
 {
-	const int32_t N = 1 << 10; // 1024 x 1024
+	constexpr int32_t N = 1 << 10; // 1024 x 1024
 	size_t bytes = N * N * sizeof(float);
 
 	std::mt19937 gen1(0);
