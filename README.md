@@ -1,5 +1,9 @@
 # CUDA_Basics
-This repo contains basic CUDA Programming examples from CoffeeBeforeArch's [CUDA Crash Course](https://youtube.com/playlist?list=PLxNPSjHT5qvtYRVdNN1yDcdSl39uHV_sU) and NVIDIA's [CUDA by Example](https://developer.download.nvidia.com/books/cuda-by-example/cuda-by-example-sample.pdf). This project was build using Visual Studio 2019.
+This repo contains basic CUDA Programming examples.
+
+# References
+* CoffeeBeforeArch's [CUDA Crash Course](https://youtube.com/playlist?list=PLxNPSjHT5qvtYRVdNN1yDcdSl39uHV_sU)
+* NVIDIA's [CUDA by Example](https://developer.download.nvidia.com/books/cuda-by-example/cuda-by-example-sample.pdf)
 
 # Getting Started
 For Windows 
