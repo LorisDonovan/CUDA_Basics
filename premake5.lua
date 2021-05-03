@@ -37,16 +37,16 @@ project "CUDA_Basics"
 	includedirs
 	{
 		"CUDA_Basics/src",
-		"CUDA_Basics/dependencies",
-		"CUDA_Basics/dependencies/cudaByExample/include",
-		"CUDA_Basics/dependencies/glfw/include",
-		"CUDA_Basics/dependencies/glad/include"
+		"ext",
+		"ext/cudaByExample/include",
+		"ext/glfw/include",
+		"ext/glad/include"
 	}
 
 	libdirs
 	{
-		"CUDA_Basics/dependencies/cudaByExample/lib",
-		"CUDA_Basics/dependencies/glfw/lib"
+		"ext/cudaByExample/lib",
+		"ext/glfw/lib"
 	}
 
 	links
