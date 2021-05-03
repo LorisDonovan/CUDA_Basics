@@ -38,12 +38,15 @@ project "CUDA_Basics"
 	{
 		"CUDA_Basics/src",
 		"CUDA_Basics/dependencies",
-		"CUDA_Basics/dependencies/cudaByExample/include"
+		"CUDA_Basics/dependencies/cudaByExample/include",
+		"CUDA_Basics/dependencies/glfw/include",
+		"CUDA_Basics/dependencies/glad/include"
 	}
 
 	libdirs
 	{
-		"CUDA_Basics/dependencies/cudaByExample/lib"
+		"CUDA_Basics/dependencies/cudaByExample/lib",
+		"CUDA_Basics/dependencies/glfw/lib"
 	}
 
 	links
@@ -51,7 +54,9 @@ project "CUDA_Basics"
 		"cudart_static.lib",
 		"cublas.lib",
 		"curand.lib",
-		"glut64.lib"
+		"glut64.lib",
+		"opengl32.lib",
+		"glfw3.lib"
 	}
 
 	filter "system:windows"
