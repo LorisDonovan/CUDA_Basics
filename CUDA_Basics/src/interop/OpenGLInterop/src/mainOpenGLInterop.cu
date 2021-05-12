@@ -235,7 +235,7 @@ int32_t InitCudaDevice()
 	// for surface object, compute capability >= 3.0
 	prop.major = 3;
 	prop.minor = 0;
-	cudaCheckErrors(cudaChooseDevice(&dev, &prop)); // choose a cuda compatible device with compute capability 1.0 or better
+	cudaCheckErrors(cudaChooseDevice(&dev, &prop)); // choose a cuda compatible device with compute capability 3.0 or better
 	cudaCheckErrors(cudaGLSetGLDevice(dev));
 
 	return dev;
@@ -262,13 +262,12 @@ __global__ void Kernel(cudaSurfaceObject_t surfaceObj, int32_t tick)
 
 	if (x < width && y < height)
 	{
-		float fx = x - width * 0.5f;
+		float fx = x - width  * 0.5f;
 		float fy = y - height * 0.5f;
-		float d = std::sqrtf(fx * fx + fy * fy);
+		float d  = std::sqrtf(fx * fx + fy * fy);
 		uint8_t grey = (uint8_t)(128.0f + 127.0f * std::cos(d / 10.0f - tick / 7.0f) / (d / 10.0f + 1.0f));
 
 		uchar4 data = make_uchar4(grey, grey, grey, 255);
 		surf2Dwrite(data, surfaceObj, x * sizeof(uchar4), y);
 	}
 }
-
