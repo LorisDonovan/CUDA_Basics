@@ -260,7 +260,7 @@ __global__ void Kernel(cudaSurfaceObject_t surfaceObj, int32_t tick)
 	int32_t x = threadIdx.x + blockDim.x * blockIdx.x;
 	int32_t y = threadIdx.y + blockDim.y * blockIdx.y;
 
-	if (x < width && y < height)
+	if (x < width || y < height)
 	{
 		float fx = x - width  * 0.5f;
 		float fy = y - height * 0.5f;
